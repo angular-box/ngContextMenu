@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <script src="lib/jquery.js"></script>
+    <script src="lib/angular.min.js"></script>
+    <script src="lib/bootstrap.js"></script>
+    <script src="lib/prettify.js"></script>
+    <script src="lib/ngContextMenu.js"></script>
+
+    <!-- <link rel="stylesheet" href="lib/bootstrap.css"></link> -->
+    <link rel="stylesheet" href="lib/bootstrap.css"></link>
+    <link rel="stylesheet" href="lib/prettify.css"></link>
+    <link rel="stylesheet" href="lib/ngContextMenu.css"></link>
+    <style>
+      .box {
+        height: 40px;
+        line-height: 20px;
+        padding: 10px;
+        margin: 20px;
+        border: 1px solid #ddd;
+      }
+      .nav-tabs-box {
+        padding: 10px;
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body ng-app="demo">
+    <div ng-controller="demoCtrl" save-content="classic-html">
+      <div contextmenu="{{lists}}" class="box" click-menu="clickMenu(item)">
+        <span>normal dropmenu</span>
+      </div>
+    </div>
+    <!-- <div role="tabpanel" class="nav-tabs-box"> -->
+    <!--   <ul class="nav nav-tabs" role="tablist"> -->
+    <!--     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Markup</a></li> -->
+    <!--     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li> -->
+    <!--   </ul> -->
+    <!--   <div class="tab-content"> -->
+    <!--     <div role="tabpanel" class="tab-pane active" id="home"> -->
+    <!--       <pre class="code" apply-content="classic-html" highlight-lang="html"> -->
+    <!--       </pre> -->
+    <!--     </div> -->
+    <!--     <div role="tabpanel" class="tab-pane" id="profile">111</div> -->
+    <!--   </div> -->
+    <!-- </div> -->
+  </body>
+  <script type="text/javascript">
+    angular.module('demo', ['ngContextMenu'])
+
+      .controller('demoCtrl', ['$scope', function($scope) {
+        $scope.lists = [{
+          name: '11'
+        }, {
+          name: '22'
+        }]
+
+        $scope.clickMenu = function (item) {
+          console.log(item);
+        };
+      }])
+  </script>
+</html>
