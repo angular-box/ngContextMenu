@@ -8,7 +8,7 @@
         },
         link: function(scope, element, attrs) {
           var dropmenu, offset, template;
-          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item)"  ng-repeat="item in menu"> <a href="#">{{item.name}}</a> </li> </ul> </div>';
+          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)"  ng-repeat="item in menu"> <a href="#">{{item.name}}</a> </li> </ul> </div>';
           scope.menu = angular.fromJson(attrs['contextmenu']) || [];
           dropmenu = $compile(template)(scope);
           element.append(dropmenu);
@@ -24,10 +24,11 @@
           $document.bind('click', function() {
             return dropmenu.removeClass('open');
           });
-          scope.clickItem = function(item) {
+          scope.clickItem = function(item, event) {
             if (scope.clickMenu) {
               return scope.clickMenu({
-                item: item
+                item: item,
+                $event: event
               });
             }
           };

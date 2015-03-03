@@ -9,7 +9,7 @@ angular.module 'ngContextMenu', []
       template = '
         <div class="ng-context-menu">
           <ul class="dropdown-menu" role="menu">
-            <li ng-click="clickItem(item)"  ng-repeat="item in menu">
+            <li ng-click="clickItem(item, $event)"  ng-repeat="item in menu">
               <a href="#">{{item.name}}</a>
             </li>
           </ul>
@@ -34,10 +34,11 @@ angular.module 'ngContextMenu', []
       $document.bind 'click', () ->
         dropmenu.removeClass('open')
 
-      scope.clickItem = (item) ->
+      scope.clickItem = (item, event) ->
         if scope.clickMenu
           scope.clickMenu({
             item: item
+            $event: event
           })
 
       # set offset or get offset
