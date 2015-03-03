@@ -5,19 +5,23 @@ angular.module 'ngContextMenu', []
     restrict: 'A'
     scope:
       clickMenu: '&'
+      rightClick: '&'
     link: (scope, element, attrs) ->
       template = '
         <div class="ng-context-menu">
           <ul class="dropdown-menu" role="menu">
-            <li ng-click="clickItem(item, $event)"  ng-repeat="item in menu">
+            <li ng-click="clickItem(item, $event)" ng-repeat="item in menu">
               <a href="#">{{item.name}}</a>
             </li>
           </ul>
         </div>
       '
 
-      scope.menu = angular.fromJson(attrs['contextmenu']) or []
-      dropmenu = $compile(template)(scope)
+      if attrs['contextmenu']
+        scope.menu = angular.fromJson(attrs['contextmenu']) or []
+      else
+        scope.menu = []
+      scope.dropmenu = dropmenu = $compile(template)(scope)
       element.append(dropmenu)
 
       element.bind 'contextmenu', (event) ->
@@ -30,6 +34,11 @@ angular.module 'ngContextMenu', []
           top: event.clientY
           left: event.clientX
         })
+
+        if scope.rightClick
+          scope.rightClick({
+            $event: event
+          })
 
       $document.bind 'click', () ->
         dropmenu.removeClass('open')
@@ -61,9 +70,11 @@ angular.module 'ngContextMenu', []
           top = options.top - curOffset.top + curTop
 
           elem.css({
-            top: top
-            left: left
+            top: top + 'px'
+            left: left + 'px'
           })
+
+          return
 
         rect = curElem.getBoundingClientRect()
 
@@ -71,6 +82,5 @@ angular.module 'ngContextMenu', []
           top: rect.top + document.body.scrollTop
           left: rect.left + document.body.scrollLeft
         }
-
   }
 ]

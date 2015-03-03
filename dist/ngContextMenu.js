@@ -4,22 +4,32 @@
       return {
         restrict: 'A',
         scope: {
-          clickMenu: '&'
+          clickMenu: '&',
+          rightClick: '&'
         },
         link: function(scope, element, attrs) {
           var dropmenu, offset, template;
-          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)"  ng-repeat="item in menu"> <a href="#">{{item.name}}</a> </li> </ul> </div>';
-          scope.menu = angular.fromJson(attrs['contextmenu']) || [];
-          dropmenu = $compile(template)(scope);
+          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)" ng-repeat="item in menu"> <a href="#">{{item.name}}</a> </li> </ul> </div>';
+          if (attrs['contextmenu']) {
+            scope.menu = angular.fromJson(attrs['contextmenu']) || [];
+          } else {
+            scope.menu = [];
+          }
+          scope.dropmenu = dropmenu = $compile(template)(scope);
           element.append(dropmenu);
           element.bind('contextmenu', function(event) {
             event.preventDefault();
             event.stopPropagation();
             dropmenu.addClass('open');
-            return offset(dropmenu, {
+            offset(dropmenu, {
               top: event.clientY,
               left: event.clientX
             });
+            if (scope.rightClick) {
+              return scope.rightClick({
+                $event: event
+              });
+            }
           });
           $document.bind('click', function() {
             return dropmenu.removeClass('open');
@@ -49,9 +59,10 @@
               left = options.left - curOffset.left + curLeft;
               top = options.top - curOffset.top + curTop;
               elem.css({
-                top: top,
-                left: left
+                top: top + 'px',
+                left: left + 'px'
               });
+              return;
             }
             rect = curElem.getBoundingClientRect();
             return {

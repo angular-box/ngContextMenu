@@ -45,6 +45,6 @@ gulp.task 'test', (done) ->
 gulp.task 'build', ['copy']
 gulp.task 'serve', ['build', 'browser-sync'], () ->
   gulp.watch 'index.html', [reload]
-  gulp.watch 'src/ngContextMenu.coffee', ['copy', reload]
+  gulp.watch 'src/ngContextMenu.coffee', ['copy', 'test', reload]
   gulp.watch 'src/ngContextMenu.scss', ['copy', reload]
 
