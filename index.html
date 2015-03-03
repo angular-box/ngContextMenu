@@ -25,29 +25,28 @@
     </style>
   </head>
   <body ng-app="demo">
-    <div ng-controller="demoCtrl" save-content="classic-html">
+    <div ng-controller="demo1Ctrl" save-content="classic-html">
       <div contextmenu="{{lists}}" class="box" click-menu="clickMenu(item)">
         <span>normal dropmenu</span>
       </div>
     </div>
-    <!-- <div role="tabpanel" class="nav-tabs-box"> -->
-    <!--   <ul class="nav nav-tabs" role="tablist"> -->
-    <!--     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Markup</a></li> -->
-    <!--     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li> -->
-    <!--   </ul> -->
-    <!--   <div class="tab-content"> -->
-    <!--     <div role="tabpanel" class="tab-pane active" id="home"> -->
-    <!--       <pre class="code" apply-content="classic-html" highlight-lang="html"> -->
-    <!--       </pre> -->
-    <!--     </div> -->
-    <!--     <div role="tabpanel" class="tab-pane" id="profile">111</div> -->
-    <!--   </div> -->
-    <!-- </div> -->
+    <div ng-controller="demo2Ctrl" save-content="classic-html">
+      <div contextmenu="{{lists}}" class="box" click-menu="clickMenu(item)">
+        <span>current item: </span>
+        <span>{{currentItem | json}}</span>
+      </div>
+    </div>
+    <div ng-controller="demo3Ctrl" save-content="classic-html">
+      <div contextmenu="{{lists}}" class="box" right-click="rightClick($event)">
+        <span>isClickRightMenu: </span>
+        <span>{{isClickRightMenu}}</span>
+      </div>
+    </div>
   </body>
   <script type="text/javascript">
     angular.module('demo', ['ngContextMenu'])
 
-      .controller('demoCtrl', ['$scope', function($scope) {
+      .controller('demo1Ctrl', ['$scope', function($scope) {
         $scope.lists = [{
           name: '11'
         }, {
@@ -57,6 +56,36 @@
         $scope.clickMenu = function (item) {
           console.log(item);
         };
+      }])
+      .controller('demo2Ctrl', ['$scope', function($scope) {
+        $scope.lists = [{
+          name: '11'
+        }, {
+          name: '22'
+        }]
+
+        $scope.currentItem = {};
+
+        $scope.clickMenu = function (item) {
+          $scope.currentItem = item;
+        };
+
+      }])
+      .controller('demo3Ctrl', ['$scope', function($scope) {
+        $scope.lists = [{
+          name: '11'
+        }, {
+          name: '22'
+        }]
+
+        $scope.isClickRightMenu = 'false'
+
+        $scope.rightClick = function () {
+
+          $scope.isClickRightMenu = 'true'
+          $scope.$digest()
+        };
+
       }])
   </script>
 </html>
