@@ -6,6 +6,7 @@ angular.module 'ngContextMenu', []
     scope:
       clickMenu: '&'
       rightClick: '&'
+      onMenuClose: '&'
     link: (scope, element, attrs) ->
       template = '
         <div class="ng-context-menu">
@@ -41,7 +42,10 @@ angular.module 'ngContextMenu', []
           })
 
       $document.bind 'click', () ->
-        dropmenu.removeClass('open')
+        if dropmenu.hasClass('open')
+          dropmenu.removeClass('open')
+          if scope.onMenuClose
+            scope.onMenuClose()
 
       scope.clickItem = (item, event) ->
         if scope.clickMenu
@@ -55,8 +59,8 @@ angular.module 'ngContextMenu', []
         curElem = elem[0]
 
         if options
-          curCssTop = getComputedStyle(curElem)['top']
-          curCssLeft = getComputedStyle(curElem)['left']
+          curCssTop = curElem.style.top or getComputedStyle(curElem)['top']
+          curCssLeft = curElem.style.left or getComputedStyle(curElem)['left']
           curOffset = offset(elem)
 
           if (curCssTop + curCssLeft).indexOf('auto') > -1

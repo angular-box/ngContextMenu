@@ -5,7 +5,8 @@
         restrict: 'A',
         scope: {
           clickMenu: '&',
-          rightClick: '&'
+          rightClick: '&',
+          onMenuClose: '&'
         },
         link: function(scope, element, attrs) {
           var dropmenu, offset, template;
@@ -32,7 +33,12 @@
             }
           });
           $document.bind('click', function() {
-            return dropmenu.removeClass('open');
+            if (dropmenu.hasClass('open')) {
+              dropmenu.removeClass('open');
+              if (scope.onMenuClose) {
+                return scope.onMenuClose();
+              }
+            }
           });
           scope.clickItem = function(item, event) {
             if (scope.clickMenu) {
@@ -46,8 +52,8 @@
             var curCssLeft, curCssTop, curElem, curLeft, curOffset, curTop, left, rect, top;
             curElem = elem[0];
             if (options) {
-              curCssTop = getComputedStyle(curElem)['top'];
-              curCssLeft = getComputedStyle(curElem)['left'];
+              curCssTop = curElem.style.top || getComputedStyle(curElem)['top'];
+              curCssLeft = curElem.style.left || getComputedStyle(curElem)['left'];
               curOffset = offset(elem);
               if ((curCssTop + curCssLeft).indexOf('auto') > -1) {
                 curTop = curElem.offsetTop;

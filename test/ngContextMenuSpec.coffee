@@ -66,7 +66,6 @@ describe('ngContextMenu', () ->
 
     it 'should call right click', () ->
       element.contextmenu()
-      console.log $rootScope.rightClick.calls
       expect($rootScope.rightClick).toHaveBeenCalled()
   )
 
@@ -106,5 +105,40 @@ describe('ngContextMenu', () ->
 
       expect(element.find('.ng-context-menu').css('top')).toEqual('200px')
       expect(element.find('.ng-context-menu').css('left')).toEqual('100px')
+
+    it 'should show position use offsetLeft and offsetTop', () ->
+      element.find('.ng-context-menu').css({
+        top: 'auto'
+        left: 0
+      })
+
+      element.find('.ng-context-menu')[0].style.left = 'auto'
+
+      element.find('.ng-context-menu').trigger({
+        type: 'contextmenu'
+        clientX: 100
+        clientY: 200
+      })
+
+      expect(element.find('.ng-context-menu').css('top')).toEqual('200px')
+      expect(element.find('.ng-context-menu').css('left')).toEqual('100px')
+
+  )
+
+  describe('hideCallback', () ->
+    beforeEach(() ->
+      $rootScope.hide = jasmine.createSpy('hide')
+      element = $compile('<div contextmenu on-menu-close="hide()"></div>')($rootScope)
+      $rootScope.$digest()
+    )
+
+    it 'should call hide function', () ->
+      element.find('.ng-context-menu').trigger({
+        type: 'contextmenu'
+      })
+
+      $(document).click()
+      expect($rootScope.hide).toHaveBeenCalled()
+
   )
 )

@@ -19,7 +19,7 @@ module.exports = function(config) {
       'lib/angular-mocks.js',
 
       'lib/ngContextMenu.js',
-      'test/**/*.spec.coffee'
+      'test/**/*Spec.coffee'
     ],
 
 
