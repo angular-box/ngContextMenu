@@ -1,4 +1,4 @@
-## 0.0.x
+## 0.0.4 - 2015/03/05
 
 * Fix scroll position
 * Add osx style

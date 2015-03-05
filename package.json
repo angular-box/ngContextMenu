@@ -1,6 +1,6 @@
 {
   "name": "ngContextMenu",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "angular contextmenu right menu",
   "main": "dist/ngContextMenu.js",
   "scripts": {
