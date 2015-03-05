@@ -137,7 +137,10 @@ describe('ngContextMenu', () ->
         type: 'contextmenu'
       })
 
-      $(document).click()
+      $(document).trigger({
+        type: 'click'
+        button: 0
+      })
       expect($rootScope.hide).toHaveBeenCalled()
 
   )

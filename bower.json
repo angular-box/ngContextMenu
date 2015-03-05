@@ -20,7 +20,9 @@
     "CHANGELOG.md",
     "Makefile",
     "test",
-    "tests"
+    "tests",
+    "lib",
+    "karma.conf.js"
   ],
   "dependencies": {
     "angular": "~1.2.28"

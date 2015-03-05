@@ -1,4 +1,9 @@
-## 0.0.3
+## 0.0.x
+
+* Fix scroll position
+* Add osx style
+
+## 0.0.3 - 2015/03/05
 
 * Add menu hide callback
 * Add menuList
@@ -12,3 +17,4 @@
 ## 0.0.1
 
 * First commit
+

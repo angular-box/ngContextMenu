@@ -13,7 +13,8 @@ angular.module 'ngContextMenu', []
         <div class="ng-context-menu">
           <ul class="dropdown-menu" role="menu">
             <li ng-click="clickItem(item, $event)" ng-repeat="item in menu">
-              <a href="#">{{item.name}}</a>
+              <hr ng-if="item.type==\'hr\'"  />
+              <a href="#" ng-if="item.type!=\'hr\'">{{item.name}}</a>
             </li>
           </ul>
         </div>
@@ -61,6 +62,8 @@ angular.module 'ngContextMenu', []
           curCssTop = curElem.style.top or getComputedStyle(curElem)['top']
           curCssLeft = curElem.style.left or getComputedStyle(curElem)['left']
           curOffset = offset(elem)
+          scrollLeft = window.pageXOffset or curElem.scrollLeft
+          scrollTop = window.pageYOffset or curElem.scrollTop
 
           if (curCssTop + curCssLeft).indexOf('auto') > -1
             curTop = curElem.offsetTop
@@ -69,10 +72,8 @@ angular.module 'ngContextMenu', []
             curTop = parseFloat(curCssTop) or 0
             curLeft = parseFloat(curCssLeft) or 0
 
-          console.log curElem.offsetTop
-
-          left = options.left - curOffset.left + curLeft
-          top = options.top - curOffset.top + curTop
+          left = scrollLeft + options.left - curOffset.left + curLeft
+          top = scrollTop + options.top - curOffset.top + curTop
 
           elem.css({
             top: top + 'px'
