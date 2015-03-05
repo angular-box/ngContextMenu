@@ -30,7 +30,7 @@ describe('ngContextMenu', () ->
   describe('render', () ->
     beforeEach(() ->
       $rootScope.lists = lists
-      element = $($compile('<div contextmenu="{{lists}}"></div>')($rootScope))
+      element = $($compile('<div contextmenu menu-list="lists"></div>')($rootScope))
       $rootScope.$digest()
     )
 
@@ -55,7 +55,7 @@ describe('ngContextMenu', () ->
     beforeEach(() ->
       $rootScope.lists = lists
       $rootScope.rightClick = jasmine.createSpy('rightClick')
-      element = $($compile('<div contextmenu="{{lists}}" right-click="rightClick($event)"></div>')($rootScope))
+      element = $($compile('<div contextmenu menu-list="lists" right-click="rightClick($event)"></div>')($rootScope))
       $rootScope.$digest()
     )
 
@@ -73,7 +73,7 @@ describe('ngContextMenu', () ->
     beforeEach(() ->
       $rootScope.lists = lists
       $rootScope.clickMenu = clickMenu
-      element = $($compile('<div contextmenu="{{lists}}" click-menu="clickMenu(item)"></div>')($rootScope))
+      element = $($compile('<div contextmenu menu-list="lists" click-menu="clickMenu(item)"></div>')($rootScope))
       $rootScope.$digest()
     )
 

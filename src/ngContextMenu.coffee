@@ -4,6 +4,7 @@ angular.module 'ngContextMenu', []
   return {
     restrict: 'A'
     scope:
+      menuList: '='
       clickMenu: '&'
       rightClick: '&'
       onMenuClose: '&'
@@ -18,10 +19,8 @@ angular.module 'ngContextMenu', []
         </div>
       '
 
-      if attrs['contextmenu']
-        scope.menu = angular.fromJson(attrs['contextmenu']) or []
-      else
-        scope.menu = []
+      scope.menu = scope.menuList
+
       scope.dropmenu = dropmenu = $compile(template)(scope)
       element.append(dropmenu)
 
@@ -41,8 +40,8 @@ angular.module 'ngContextMenu', []
             $event: event
           })
 
-      $document.bind 'click', () ->
-        if dropmenu.hasClass('open')
+      $document.bind 'click', (event) ->
+        if event.button is 0 and dropmenu.hasClass('open')
           dropmenu.removeClass('open')
           if scope.onMenuClose
             scope.onMenuClose()
@@ -69,6 +68,8 @@ angular.module 'ngContextMenu', []
           else
             curTop = parseFloat(curCssTop) or 0
             curLeft = parseFloat(curCssLeft) or 0
+
+          console.log curElem.offsetTop
 
           left = options.left - curOffset.left + curLeft
           top = options.top - curOffset.top + curTop

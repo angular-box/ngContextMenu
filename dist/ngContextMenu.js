@@ -4,6 +4,7 @@
       return {
         restrict: 'A',
         scope: {
+          menuList: '=',
           clickMenu: '&',
           rightClick: '&',
           onMenuClose: '&'
@@ -11,11 +12,7 @@
         link: function(scope, element, attrs) {
           var dropmenu, offset, template;
           template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)" ng-repeat="item in menu"> <a href="#">{{item.name}}</a> </li> </ul> </div>';
-          if (attrs['contextmenu']) {
-            scope.menu = angular.fromJson(attrs['contextmenu']) || [];
-          } else {
-            scope.menu = [];
-          }
+          scope.menu = scope.menuList;
           scope.dropmenu = dropmenu = $compile(template)(scope);
           element.append(dropmenu);
           element.bind('contextmenu', function(event) {
@@ -32,8 +29,8 @@
               });
             }
           });
-          $document.bind('click', function() {
-            if (dropmenu.hasClass('open')) {
+          $document.bind('click', function(event) {
+            if (event.button === 0 && dropmenu.hasClass('open')) {
               dropmenu.removeClass('open');
               if (scope.onMenuClose) {
                 return scope.onMenuClose();
@@ -62,6 +59,7 @@
                 curTop = parseFloat(curCssTop) || 0;
                 curLeft = parseFloat(curCssLeft) || 0;
               }
+              console.log(curElem.offsetTop);
               left = options.left - curOffset.left + curLeft;
               top = options.top - curOffset.top + curTop;
               elem.css({
