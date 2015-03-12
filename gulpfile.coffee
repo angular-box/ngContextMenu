@@ -9,12 +9,19 @@ gulp.task 'script', () ->
     .pipe(plugins.coffee())
     .pipe(gulp.dest('dist'))
 
+gulp.task 'min', ['script'], () ->
+  gulp.src('dist/ngContextMenu.js')
+    .pipe(plugins.uglify())
+    .pipe(plugins.rename('ngContextMenu.min.js'))
+    .pipe(gulp.dest('dist'))
+
 gulp.task 'style', () ->
   gulp.src('src/ngContextMenu.scss')
     .pipe(plugins.sass())
+    .pipe(plugins.autoprefixer({}))
     .pipe(gulp.dest('dist'))
 
-gulp.task 'copy', ['script', 'style'], () ->
+gulp.task 'copy', ['min', 'style'], () ->
   gulp.src([
     'bower_components/jquery/dist/jquery.js'
     'bower_components/angular-mocks/angular-mocks.js'

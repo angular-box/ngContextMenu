@@ -24,6 +24,13 @@
     li {
       cursor: pointer;
       margin: 0;
+      hr {
+        border: none;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.10);
+        margin: 6px 1px 5px;
+        padding: 0;
+      }
 
       a{
         display: block;
@@ -33,6 +40,32 @@
 
         &:hover {
           background: #ddd;
+        }
+      }
+    }
+  }
+}
+
+.osx {
+  .dropdown-menu {
+    padding: 3px 0;
+    hr {
+      border: none;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.10);
+      margin: 6px 1px 5px;
+      padding: 0;
+    }
+    li {
+      & > a {
+        padding: 0 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0);
+        border-bottom: 1px solid rgba(0, 0, 0, 0);
+        &:hover {
+          background: linear-gradient(to bottom, #648bf5 0%, #2866f2 100%);
+          border-top: 1px solid #5a82eb;
+          border-bottom: 1px solid #1758e7;
+          color: white;
         }
       }
     }

@@ -4,23 +4,24 @@ angular.module 'ngContextMenu', []
   return {
     restrict: 'A'
     scope:
+      menuList: '='
       clickMenu: '&'
       rightClick: '&'
+      onMenuClose: '&'
     link: (scope, element, attrs) ->
       template = '
         <div class="ng-context-menu">
           <ul class="dropdown-menu" role="menu">
             <li ng-click="clickItem(item, $event)" ng-repeat="item in menu">
-              <a href="#">{{item.name}}</a>
+              <hr ng-if="item.type==\'hr\'"  />
+              <a href="#" ng-if="item.type!=\'hr\'">{{item.name}}</a>
             </li>
           </ul>
         </div>
       '
 
-      if attrs['contextmenu']
-        scope.menu = angular.fromJson(attrs['contextmenu']) or []
-      else
-        scope.menu = []
+      scope.menu = scope.menuList
+
       scope.dropmenu = dropmenu = $compile(template)(scope)
       element.append(dropmenu)
 
@@ -40,8 +41,11 @@ angular.module 'ngContextMenu', []
             $event: event
           })
 
-      $document.bind 'click', () ->
-        dropmenu.removeClass('open')
+      $document.bind 'click', (event) ->
+        if event.button is 0 and dropmenu.hasClass('open')
+          dropmenu.removeClass('open')
+          if scope.onMenuClose
+            scope.onMenuClose()
 
       scope.clickItem = (item, event) ->
         if scope.clickMenu
@@ -55,9 +59,11 @@ angular.module 'ngContextMenu', []
         curElem = elem[0]
 
         if options
-          curCssTop = getComputedStyle(curElem)['top']
-          curCssLeft = getComputedStyle(curElem)['left']
+          curCssTop = curElem.style.top or getComputedStyle(curElem)['top']
+          curCssLeft = curElem.style.left or getComputedStyle(curElem)['left']
           curOffset = offset(elem)
+          scrollLeft = window.pageXOffset or curElem.scrollLeft
+          scrollTop = window.pageYOffset or curElem.scrollTop
 
           if (curCssTop + curCssLeft).indexOf('auto') > -1
             curTop = curElem.offsetTop
@@ -66,8 +72,8 @@ angular.module 'ngContextMenu', []
             curTop = parseFloat(curCssTop) or 0
             curLeft = parseFloat(curCssLeft) or 0
 
-          left = options.left - curOffset.left + curLeft
-          top = options.top - curOffset.top + curTop
+          left = scrollLeft + options.left - curOffset.left + curLeft
+          top = scrollTop + options.top - curOffset.top + curTop
 
           elem.css({
             top: top + 'px'

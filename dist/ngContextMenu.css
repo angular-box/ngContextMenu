@@ -21,6 +21,12 @@
     .ng-context-menu .dropdown-menu li {
       cursor: pointer;
       margin: 0; }
+      .ng-context-menu .dropdown-menu li hr {
+        border: none;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.1);
+        margin: 6px 1px 5px;
+        padding: 0; }
       .ng-context-menu .dropdown-menu li a {
         display: block;
         padding: 0.5rem;
@@ -28,3 +34,22 @@
         text-decoration: none; }
         .ng-context-menu .dropdown-menu li a:hover {
           background: #ddd; }
+
+.osx .dropdown-menu {
+  padding: 3px 0; }
+  .osx .dropdown-menu hr {
+    border: none;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 6px 1px 5px;
+    padding: 0; }
+  .osx .dropdown-menu li > a {
+    padding: 0 20px;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent; }
+    .osx .dropdown-menu li > a:hover {
+      background: -webkit-linear-gradient(top, #648bf5 0%, #2866f2 100%);
+      background: linear-gradient(to bottom, #648bf5 0%, #2866f2 100%);
+      border-top: 1px solid #5a82eb;
+      border-bottom: 1px solid #1758e7;
+      color: white; }

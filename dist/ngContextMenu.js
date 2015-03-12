@@ -4,17 +4,15 @@
       return {
         restrict: 'A',
         scope: {
+          menuList: '=',
           clickMenu: '&',
-          rightClick: '&'
+          rightClick: '&',
+          onMenuClose: '&'
         },
         link: function(scope, element, attrs) {
           var dropmenu, offset, template;
-          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)" ng-repeat="item in menu"> <a href="#">{{item.name}}</a> </li> </ul> </div>';
-          if (attrs['contextmenu']) {
-            scope.menu = angular.fromJson(attrs['contextmenu']) || [];
-          } else {
-            scope.menu = [];
-          }
+          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)" ng-repeat="item in menu"> <hr ng-if="item.type==\'hr\'"  /> <a href="#" ng-if="item.type!=\'hr\'">{{item.name}}</a> </li> </ul> </div>';
+          scope.menu = scope.menuList;
           scope.dropmenu = dropmenu = $compile(template)(scope);
           element.append(dropmenu);
           element.bind('contextmenu', function(event) {
@@ -31,8 +29,13 @@
               });
             }
           });
-          $document.bind('click', function() {
-            return dropmenu.removeClass('open');
+          $document.bind('click', function(event) {
+            if (event.button === 0 && dropmenu.hasClass('open')) {
+              dropmenu.removeClass('open');
+              if (scope.onMenuClose) {
+                return scope.onMenuClose();
+              }
+            }
           });
           scope.clickItem = function(item, event) {
             if (scope.clickMenu) {
@@ -43,12 +46,14 @@
             }
           };
           return offset = function(elem, options) {
-            var curCssLeft, curCssTop, curElem, curLeft, curOffset, curTop, left, rect, top;
+            var curCssLeft, curCssTop, curElem, curLeft, curOffset, curTop, left, rect, scrollLeft, scrollTop, top;
             curElem = elem[0];
             if (options) {
-              curCssTop = getComputedStyle(curElem)['top'];
-              curCssLeft = getComputedStyle(curElem)['left'];
+              curCssTop = curElem.style.top || getComputedStyle(curElem)['top'];
+              curCssLeft = curElem.style.left || getComputedStyle(curElem)['left'];
               curOffset = offset(elem);
+              scrollLeft = window.pageXOffset || curElem.scrollLeft;
+              scrollTop = window.pageYOffset || curElem.scrollTop;
               if ((curCssTop + curCssLeft).indexOf('auto') > -1) {
                 curTop = curElem.offsetTop;
                 curLeft = curElem.offsetLeft;
@@ -56,8 +61,8 @@
                 curTop = parseFloat(curCssTop) || 0;
                 curLeft = parseFloat(curCssLeft) || 0;
               }
-              left = options.left - curOffset.left + curLeft;
-              top = options.top - curOffset.top + curTop;
+              left = scrollLeft + options.left - curOffset.left + curLeft;
+              top = scrollTop + options.top - curOffset.top + curTop;
               elem.css({
                 top: top + 'px',
                 left: left + 'px'

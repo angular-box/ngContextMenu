@@ -15,15 +15,15 @@ bower install ngcontextmenu --save
 
 ## Usage
 
-html
+* html
 
 ```
-<div contextmenu="{{lists}}" click-menu="clickMenu(item)">
+<div contextmenu menu-list="lists" click-menu="clickMenu(item)">
   <span>111</span>
 </div>
 ```
 
-js
+* js
 
 ```
 $scope.lists = [{

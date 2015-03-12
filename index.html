@@ -26,20 +26,31 @@
   </head>
   <body ng-app="demo">
     <div ng-controller="demo1Ctrl" save-content="classic-html">
-      <div contextmenu="{{lists}}" class="box" click-menu="clickMenu(item)">
+      <div contextmenu menu-list="lists" class="box" click-menu="clickMenu(item)">
         <span>normal dropmenu</span>
       </div>
     </div>
     <div ng-controller="demo2Ctrl" save-content="classic-html">
-      <div contextmenu="{{lists}}" class="box" click-menu="clickMenu(item)">
+      <div contextmenu menu-list="lists" class="box" click-menu="clickMenu(item)">
         <span>current item: </span>
         <span>{{currentItem | json}}</span>
       </div>
     </div>
     <div ng-controller="demo3Ctrl" save-content="classic-html">
-      <div contextmenu="{{lists}}" class="box" right-click="rightClick($event)">
+      <div contextmenu menu-list="lists" class="box" right-click="rightClick($event)">
         <span>isClickRightMenu: </span>
         <span>{{isClickRightMenu}}</span>
+      </div>
+    </div>
+    <div ng-controller="demo4Ctrl" save-content="classic-html">
+      <div contextmenu menu-list="lists" class="box" on-menu-close="onClose()">
+        <span>isMenuClose
+        <span>{{isMenuClose}}</span>
+      </div>
+    </div>
+    <div ng-controller="demo5Ctrl" save-content="classic-html">
+      <div contextmenu menu-list="lists" class="box osx">
+        <span>Mac OSX style<span>
       </div>
     </div>
   </body>
@@ -85,6 +96,36 @@
           $scope.isClickRightMenu = 'true'
           $scope.$digest()
         };
+
+      }])
+      .controller('demo4Ctrl', ['$scope', function($scope) {
+        $scope.lists = [{
+          name: '11'
+        }, {
+          type: 'hr'
+        }, {
+          name: '22'
+        }]
+
+        $scope.isMenuClose = 'false'
+
+        $scope.onClose = function () {
+
+          $scope.isMenuClose = 'true'
+          $scope.$digest()
+        };
+
+      }])
+      .controller('demo5Ctrl', ['$scope', function($scope) {
+        $scope.lists = [{
+          name: 'mac'
+        }, {
+          type: 'hr'
+        }, {
+          name: 'linux'
+        }, {
+          name: 'window'
+        }]
 
       }])
   </script>
