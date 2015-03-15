@@ -1,3 +1,7 @@
+## 0.0.5 - 2015/03/15
+
+* Add options
+
 ## 0.0.4 - 2015/03/05
 
 * Fix scroll position
