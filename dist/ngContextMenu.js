@@ -1,37 +1,55 @@
 (function() {
   angular.module('ngContextMenu', []).directive('contextmenu', [
     '$compile', '$document', function($compile, $document) {
+      var defaults;
+      defaults = function(obj, prop, value) {
+        if (!obj[prop] && !(typeof obj[prop] === 'boolean')) {
+          return obj[prop] = value;
+        }
+      };
       return {
         restrict: 'A',
         scope: {
           menuList: '=',
           clickMenu: '&',
           rightClick: '&',
-          onMenuClose: '&'
+          onMenuClose: '&',
+          options: '=?'
         },
         link: function(scope, element, attrs) {
-          var dropmenu, offset, template;
-          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)" ng-repeat="item in menu"> <hr ng-if="item.type==\'hr\'"  /> <a href="#" ng-if="item.type!=\'hr\'">{{item.name}}</a> </li> </ul> </div>';
+          var dropmenu, hideMenu, offset, template;
+          template = '<div class="ng-context-menu"> <ul class="dropdown-menu" role="menu"> <li ng-click="clickItem(item, $event)" ng-repeat="item in menu"> <hr ng-if="item.type==\'hr\'"  /> <a href="javascript:void(0)" ng-if="item.type!=\'hr\'">{{item[options.itemLabel]}}</a> </li> </ul> </div>';
+          scope.options = scope.options || {};
+          defaults(scope.options, 'itemLabel', 'name');
+          defaults(scope.options, 'isMultiple', true);
           scope.menu = scope.menuList;
           scope.dropmenu = dropmenu = $compile(template)(scope);
           element.append(dropmenu);
           element.bind('contextmenu', function(event) {
             event.preventDefault();
-            event.stopPropagation();
-            dropmenu.addClass('open');
-            offset(dropmenu, {
-              top: event.clientY,
-              left: event.clientX
-            });
-            if (scope.rightClick) {
-              return scope.rightClick({
-                $event: event
+            return setTimeout(function() {
+              offset(dropmenu, {
+                top: event.clientY,
+                left: event.clientX
               });
+              if (scope.rightClick) {
+                scope.rightClick({
+                  $event: event
+                });
+              }
+              return dropmenu.addClass('open');
+            }, 0);
+          });
+          $document.bind('contextmenu', function(event) {
+            if (!scope.options.isMultiple) {
+              if (dropmenu.hasClass('open')) {
+                return hideMenu();
+              }
             }
           });
           $document.bind('click', function(event) {
             if (event.button === 0 && dropmenu.hasClass('open')) {
-              dropmenu.removeClass('open');
+              hideMenu();
               if (scope.onMenuClose) {
                 return scope.onMenuClose();
               }
@@ -44,6 +62,13 @@
                 $event: event
               });
             }
+          };
+          hideMenu = function() {
+            dropmenu.css({
+              top: 0,
+              left: 0
+            });
+            return dropmenu.removeClass('open');
           };
           return offset = function(elem, options) {
             var curCssLeft, curCssTop, curElem, curLeft, curOffset, curTop, left, rect, scrollLeft, scrollTop, top;

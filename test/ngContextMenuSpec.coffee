@@ -59,14 +59,20 @@ describe('ngContextMenu', () ->
       $rootScope.$digest()
     )
 
-    it 'should show drop-menu with element right click', () ->
+    it 'should show drop-menu with element right click', (done) ->
       element.contextmenu()
 
-      expect(element.find('.ng-context-menu').hasClass('open')).toBe(true)
+      setTimeout () ->
+        expect(element.find('.ng-context-menu').hasClass('open')).toBe(true)
+        done()
+      , 5
 
-    it 'should call right click', () ->
+    it 'should call right click', (done) ->
       element.contextmenu()
-      expect($rootScope.rightClick).toHaveBeenCalled()
+      setTimeout () ->
+        expect($rootScope.rightClick).toHaveBeenCalled()
+        done()
+      , 5
   )
 
   describe('clickItem', () ->
@@ -96,17 +102,20 @@ describe('ngContextMenu', () ->
       $rootScope.$digest()
     )
 
-    it 'should show fixed position', () ->
+    it 'should show fixed position', (done) ->
       element.find('.ng-context-menu').trigger({
         type: 'contextmenu'
         clientX: 100
         clientY: 200
       })
 
-      expect(element.find('.ng-context-menu').css('top')).toEqual('200px')
-      expect(element.find('.ng-context-menu').css('left')).toEqual('100px')
+      setTimeout () ->
+        expect(element.find('.ng-context-menu').css('top')).toEqual('200px')
+        expect(element.find('.ng-context-menu').css('left')).toEqual('100px')
+        done()
+      , 5
 
-    it 'should show position use offsetLeft and offsetTop', () ->
+    it 'should show position use offsetLeft and offsetTop', (done) ->
       element.find('.ng-context-menu').css({
         top: 'auto'
         left: 0
@@ -120,8 +129,11 @@ describe('ngContextMenu', () ->
         clientY: 200
       })
 
-      expect(element.find('.ng-context-menu').css('top')).toEqual('200px')
-      expect(element.find('.ng-context-menu').css('left')).toEqual('100px')
+      setTimeout () ->
+        expect(element.find('.ng-context-menu').css('top')).toEqual('200px')
+        expect(element.find('.ng-context-menu').css('left')).toEqual('100px')
+        done()
+      , 5
 
   )
 
@@ -132,16 +144,52 @@ describe('ngContextMenu', () ->
       $rootScope.$digest()
     )
 
-    it 'should call hide function', () ->
+    it 'should call hide function', (done) ->
       element.find('.ng-context-menu').trigger({
         type: 'contextmenu'
       })
 
-      $(document).trigger({
-        type: 'click'
-        button: 0
-      })
-      expect($rootScope.hide).toHaveBeenCalled()
+      setTimeout () ->
+        $(document).trigger({
+          type: 'click'
+          button: 0
+        })
 
+        expect($rootScope.hide).toHaveBeenCalled()
+        done()
+      , 5
+  )
+
+  describe('menu options', () ->
+    beforeEach(() ->
+      $rootScope.lists = [{
+        label: 'item1'
+      }, {
+        label: 'item2'
+      }]
+      $rootScope.options = {
+        itemLabel: 'label'
+        isMultiple: false
+      }
+      element = $($compile('<div contextmenu menu-list="lists" options="options"></div>')($rootScope))
+      $rootScope.$digest()
+    )
+    it 'should change label name', () ->
+      expect(element.find('.dropdown-menu li a').eq(0).text()).toEqual('item1')
+      expect(element.find('.dropdown-menu li a').eq(1).text()).toEqual('item2')
+
+    it 'should hide if dropmenu is open with dropmenu right click', (done) ->
+      element.find('.ng-context-menu').trigger({
+        type: 'contextmenu'
+      })
+
+      setTimeout () ->
+        expect(element.find('.ng-context-menu').hasClass('open')).toBe(true)
+        $(document).trigger({
+          type: 'contextmenu'
+        })
+        expect(element.find('.ng-context-menu').hasClass('open')).toBe(false)
+        done()
+      , 5
   )
 )

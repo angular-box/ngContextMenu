@@ -26,7 +26,7 @@
   </head>
   <body ng-app="demo">
     <div ng-controller="demo1Ctrl" save-content="classic-html">
-      <div contextmenu menu-list="lists" class="box" click-menu="clickMenu(item)">
+      <div contextmenu options="menuOptions" menu-list="lists" class="box" click-menu="clickMenu(item)">
         <span>normal dropmenu</span>
       </div>
     </div>
@@ -59,10 +59,15 @@
 
       .controller('demo1Ctrl', ['$scope', function($scope) {
         $scope.lists = [{
-          name: '11'
+          label: '11'
         }, {
-          name: '22'
+          label: '22'
         }]
+
+        $scope.menuOptions = {
+          itemLabel: 'label',
+          isMultiple: false
+        }
 
         $scope.clickMenu = function (item) {
           console.log(item);
