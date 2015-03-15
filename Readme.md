@@ -37,6 +37,15 @@ $scope.clickMenu = function (item) {
 };
 ```
 
+You can add options config
+
+```
+$scope.options = {
+  isMultiple: false,
+  itemLabel: 'label'
+}
+```
+
 ## Pull Request
 
 ```
@@ -57,9 +66,9 @@ gulp test
 
 ## Todo
 
-* Add options config
-* Add style
 * Add animation
+* Add nest menu
+* Add disabled menu
 
 [travis-image]: https://travis-ci.org/angular-box/ngContextMenu.svg
 [travis-url]: https://travis-ci.org/angular-box/ngContextMenu

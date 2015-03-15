@@ -1,6 +1,10 @@
 angular.module 'ngContextMenu', []
 
 .directive 'contextmenu', ['$compile', '$document', ($compile, $document) ->
+  defaults = (obj, prop, value) ->
+    if not obj[prop] and not (typeof obj[prop] is 'boolean')
+      obj[prop] = value
+
   return {
     restrict: 'A'
     scope:
@@ -8,17 +12,22 @@ angular.module 'ngContextMenu', []
       clickMenu: '&'
       rightClick: '&'
       onMenuClose: '&'
+      options: '=?'
     link: (scope, element, attrs) ->
       template = '
         <div class="ng-context-menu">
           <ul class="dropdown-menu" role="menu">
             <li ng-click="clickItem(item, $event)" ng-repeat="item in menu">
               <hr ng-if="item.type==\'hr\'"  />
-              <a href="#" ng-if="item.type!=\'hr\'">{{item.name}}</a>
+              <a href="javascript:void(0)" ng-if="item.type!=\'hr\'">{{item[options.itemLabel]}}</a>
             </li>
           </ul>
         </div>
       '
+
+      scope.options = scope.options or {}
+      defaults(scope.options, 'itemLabel', 'name')
+      defaults(scope.options, 'isMultiple', true)
 
       scope.menu = scope.menuList
 
@@ -27,23 +36,31 @@ angular.module 'ngContextMenu', []
 
       element.bind 'contextmenu', (event) ->
         event.preventDefault()
-        event.stopPropagation()
+        # event.stopPropagation()
 
-        dropmenu.addClass('open')
-        
-        offset(dropmenu, {
-          top: event.clientY
-          left: event.clientX
-        })
-
-        if scope.rightClick
-          scope.rightClick({
-            $event: event
+        setTimeout () ->
+          offset(dropmenu, {
+            top: event.clientY
+            left: event.clientX
           })
+
+          if scope.rightClick
+            scope.rightClick({
+              $event: event
+            })
+
+          dropmenu.addClass('open')
+        , 0
+        
+      $document.bind 'contextmenu', (event) ->
+        if not scope.options.isMultiple
+          if dropmenu.hasClass('open')
+            hideMenu()
 
       $document.bind 'click', (event) ->
         if event.button is 0 and dropmenu.hasClass('open')
-          dropmenu.removeClass('open')
+          # dropmenu.removeClass('open')
+          hideMenu()
           if scope.onMenuClose
             scope.onMenuClose()
 
@@ -53,6 +70,13 @@ angular.module 'ngContextMenu', []
             item: item
             $event: event
           })
+
+      hideMenu = () ->
+        dropmenu.css({
+          top: 0
+          left: 0
+        })
+        dropmenu.removeClass('open')
 
       # set offset or get offset
       offset = (elem, options) ->
