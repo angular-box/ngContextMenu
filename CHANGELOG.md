@@ -1,3 +1,7 @@
+## 0.0.6 - 2015/03/19
+
+* Fix position fixed
+
 ## 0.0.5 - 2015/03/15
 
 * Add options
