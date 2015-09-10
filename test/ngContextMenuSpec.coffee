@@ -192,4 +192,33 @@ describe('ngContextMenu', () ->
         done()
       , 5
   )
+
+  describe('menu align', () ->
+    beforeEach () ->
+      $rootScope.lists = [{
+        label: 'item1'
+      }, {
+        label: 'item2'
+      }]
+
+    describe('left top', () ->
+      element = null
+      beforeEach () ->
+        element = $($compile('<div contextmenu menu-list="lists" align="rt"></div>')($rootScope))
+        element.find('.ng-context-menu')[0].width = 50
+        $rootScope.$digest()
+
+      it 'should align in position left top', (done) ->
+        element.find('.ng-context-menu').trigger({
+          type: 'contextmenu'
+          clientX: 100
+          clientY: 200
+        })
+        setTimeout () ->
+          console.log element.find('.ng-context-menu').css('top')
+          console.log element.find('.ng-context-menu').css('left')
+          done()
+        , 500
+    )
+  )
 )

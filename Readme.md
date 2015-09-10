@@ -46,6 +46,19 @@ $scope.options = {
 }
 ```
 
+### align
+
+add align position
+
+```
+<div contextmenu menu-list="lists" class="box" align="rb"></div>
+```
+
+* lt left top(default)
+* lb left bottom
+* rt right top
+* rb right bottom
+
 ## Pull Request
 
 ```
