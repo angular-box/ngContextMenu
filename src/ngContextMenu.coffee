@@ -13,6 +13,7 @@ angular.module 'ngContextMenu', []
       rightClick: '&'
       onMenuClose: '&'
       options: '=?'
+      align: '@'
     link: (scope, element, attrs) ->
       template = '
         <div class="ng-context-menu">
@@ -39,17 +40,36 @@ angular.module 'ngContextMenu', []
         # event.stopPropagation()
 
         setTimeout () ->
-          offset(dropmenu, {
-            top: event.clientY
-            left: event.clientX
-          })
-
           if scope.rightClick
             scope.rightClick({
               $event: event
             })
 
           dropmenu.addClass('open')
+
+          dropmenuHeight = dropmenu[0].offsetHeight
+          dropmenuWidth  = dropmenu[0].offsetWidth
+
+          scope.align = scope.align or 'lt'
+          switch(scope.align)
+            when 'lt'
+              top = event.clientY
+              left = event.clientX
+            when 'lb'
+              top = event.clientY - dropmenuHeight
+              left = event.clientX
+            when 'rt'
+              top = event.clientY
+              left = event.clientX - dropmenuWidth
+            when 'rb'
+              top = event.clientY - dropmenuHeight
+              left = event.clientX - dropmenuWidth
+
+          offset(dropmenu, {
+            top: top
+            left: left
+          })
+
         , 0
         
       $document.bind 'contextmenu', (event) ->

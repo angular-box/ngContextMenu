@@ -1,18 +1,18 @@
 <html>
   <head>
-    <script src="lib/jquery.js"></script>
+    <!-- <script src="lib/jquery.js"></script> -->
     <script src="lib/angular.min.js"></script>
-    <script src="lib/bootstrap.js"></script>
-    <script src="lib/prettify.js"></script>
+    <!-- <script src="lib/bootstrap.js"></script> -->
+    <!-- <script src="lib/prettify.js"></script> -->
     <script src="lib/ngContextMenu.js"></script>
 
     <!-- <link rel="stylesheet" href="lib/bootstrap.css"></link> -->
-    <link rel="stylesheet" href="lib/bootstrap.css"></link>
-    <link rel="stylesheet" href="lib/prettify.css"></link>
+    <!-- <link rel="stylesheet" href="lib/bootstrap.css"></link> -->
+    <!-- <link rel="stylesheet" href="lib/prettify.css"></link> -->
     <link rel="stylesheet" href="lib/ngContextMenu.css"></link>
     <style>
       .box {
-        height: 40px;
+        height: 20px;
         line-height: 20px;
         padding: 10px;
         margin: 20px;
@@ -49,8 +49,13 @@
       </div>
     </div>
     <div ng-controller="demo5Ctrl" save-content="classic-html">
-      <div contextmenu menu-list="lists" class="box osx">
+      <div contextmenu menu-list="lists" class="box osx" align="rb">
         <span>Mac OSX style<span>
+      </div>
+    </div>
+    <div ng-controller="demo6Ctrl" save-content="classic-html">
+      <div contextmenu menu-list="lists" class="box" align="rb">
+        <span>align position<span>
       </div>
     </div>
   </body>
@@ -130,6 +135,14 @@
           name: 'linux'
         }, {
           name: 'window'
+        }]
+
+      }])
+      .controller('demo6Ctrl', ['$scope', function($scope) {
+        $scope.lists = [{
+          name: '11'
+        }, {
+          name: '22'
         }]
 
       }])
