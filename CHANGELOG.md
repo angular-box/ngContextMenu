@@ -1,3 +1,8 @@
+## 0.0.7 - 2015/09/10
+
+* Add align
+* Change menu style
+
 ## 0.0.6 - 2015/03/19
 
 * Fix position fixed
